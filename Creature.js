@@ -3,10 +3,12 @@ class Creature{
     this.pos = createVector(x,y);
     this.vel = createVector(0,0);
     this.acc = createVector(0,0);
-    this.maxSpeed = 0.5;
-    this.maxForce = 0.1;
-    this.r = 10;
+    this.maxSpeed = 0.05;
+    this.maxForce = 0.02;
+    this.r = 3;
     this.behavior = 'seek'; // 初始行为设为 seek
+    this.perceptionRadius = 120; // 新增检测范围
+    this.repulsionRadius = 30; // 排斥力作用范围
   }
   
   toggleBehavior() {
@@ -15,7 +17,7 @@ class Creature{
   }
   
   flee(target) {
-    return this.seek(target).mult(-1);
+    return this.seek(target).mult(-2);
   }
   
   seek(target){
@@ -41,8 +43,10 @@ class Creature{
   
   randomSwing(intensity){
     let randomSwing = p5.Vector.random2D();
+    randomSwing.normalize(1);
     randomSwing.mult(intensity);
-    this.acc.add(randomSwing);
+    //this.acc.add(randomSwing);
+    this.applyForce(randomSwing);
   }
   
   update(){
@@ -55,14 +59,15 @@ class Creature{
   }
   
   show(){
+    let alpha = map(sin(frameCount * 0.02), -1, 1, 0, 100); // 使用 sin 函数计算透明度
     stroke(255);
-    strokeWeight(1);
+    fill(2555,alpha);
+    strokeWeight(0.5);
     push();
     translate(this.pos.x,this.pos.y);
     rotate(this.vel.heading());
-    triangle(-this.r,-this.r/2,-this.r,this.r/2,this.r,0);
-    // rectMode(CENTER);
-    // rect(0,0,this.r,this.r);
+    triangle(-this.r,-this.r,-this.r,this.r,this.r,0);
+    //rect(0,0,this.r,this.r);
     pop();
   }
   
@@ -79,21 +84,50 @@ class Creature{
     }
   }
   
-   checkForRipple(prevVel) {
-    // 如果生物的速度方向发生了显著变化，则在其位置产生水波纹
-    if (this.vel.heading() !== prevVel.heading()) {
+  checkForRipple(prevVel) {
+    let angleChange = getAngleBetween(prevVel, this.vel);
+    if (abs(angleChange) > PI/1.2) {
       ripple.disturb(Math.floor(this.pos.x), Math.floor(this.pos.y));
     }
   }
+
   
-  applyBehavior(target) {
-    let force;
-    if (this.behavior === 'seek') {
-      force = this.seek(target);
-    } else {
-      force = this.flee(target);
+  applyBehavior(targets) {
+    
+     let totalForce = createVector();
+    for (let target of targets) {
+      let d = p5.Vector.dist(this.pos, target.getPosition());
+      if (d < this.perceptionRadius) { // 仅当目标在检测范围内时才作出反应
+        let force = (this.behavior === 'seek') ? this.seek(target.getPosition()) : this.flee(target.getPosition());
+        totalForce.add(force);
+      }
     }
-    this.applyForce(force);
+    this.applyForce(totalForce);
+    
+    //this.applyForce(force);
   }
   
+  applyRepulsion(others) {
+    let repulsionForce = createVector();
+    for (let other of others) {
+      if (other !== this) {
+        let d = p5.Vector.dist(this.pos, other.pos);
+        if ((d > 0) && (d < this.repulsionRadius)) {
+          let diff = p5.Vector.sub(this.pos, other.pos);
+          diff.div(d * d); // 排斥力与距离的平方成反比
+          repulsionForce.add(diff);
+        }
+      }
+    }
+    this.applyForce(repulsionForce);
+  }
+  
+}
+
+function getAngleBetween(v1, v2) {
+  let dot = v1.dot(v2);
+  let mag1 = v1.mag();
+  let mag2 = v2.mag();
+  let angle = Math.acos(dot / (mag1 * mag2));
+  return angle;
 }

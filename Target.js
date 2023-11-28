@@ -14,8 +14,14 @@ class Target {
   }
 
   display() {
-    fill(255, 100);
-    circle(this.x, this.y, 12);
+    fill(255, 50);
+    //circle(this.x, this.y, 12);
+    push();
+    translate(this.x, this.y);
+    rect(0, 0, 12, 12);
+    rotate(PI / 4);
+    rect(0, 0, 12, 12);
+    pop();
   }
 
   getPosition() {

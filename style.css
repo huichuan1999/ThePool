@@ -1,7 +1,14 @@
 html, body {
   margin: 0;
   padding: 0;
+  height:100%;
+  background-color: black;
+  display:flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
 }
 canvas {
   display: block;
+  transform:scale(2);
+  transform-origin: center; /* 确保放大时画布保持居中 */
 }

@@ -1,8 +1,9 @@
 class Ripple {
-  constructor(cols, rows, dampening) {
+  constructor(cols, rows, dampening, pixelSize) {
     this.cols = cols;
     this.rows = rows;
     this.dampening = dampening;
+    this.pixelSize = pixelSize; // 新增：像素放大尺寸
     this.current = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
     this.previous = new Array(cols).fill(0).map(() => new Array(rows).fill(0));
   }
@@ -38,9 +39,21 @@ class Ripple {
     updatePixels();
   }
 
+  // display() {
+  //   for (let i = 1; i < this.cols - 1; i++) {
+  //     for (let j = 1; j < this.rows - 1; j++) {
+  //       let val = this.current[i][j];
+  //       fill(val);
+  //       noStroke();
+  //       // 绘制放大的像素方块
+  //       rect(i * this.pixelSize, j * this.pixelSize, this.pixelSize, this.pixelSize,4,4);
+  //     }
+  //   }
+  // }
+
   disturb(x, y) {
     if (x > 0 && x < this.cols && y > 0 && y < this.rows) {
-      this.previous[x][y] = 3000;
+      this.previous[x][y] = 2000; //数值越小 涟漪越不明显
     }
   }
 }
