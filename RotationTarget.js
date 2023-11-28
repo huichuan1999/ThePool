@@ -1,4 +1,4 @@
-class Target {
+class RotationTarget {
   constructor(x, y, radius, rotationSpeed) {
     this.center = createVector(x, y);
     this.radius = radius;
@@ -14,17 +14,18 @@ class Target {
   }
 
   display() {
-    fill(255, 50);
-    //circle(this.x, this.y, 12);
-    push();
-    translate(this.x, this.y);
-    rect(0, 0, 12, 12);
-    rotate(PI / 4);
-    rect(0, 0, 12, 12);
-    pop();
+    fill(255);
+    circle(this.x, this.y, 3);
+    // push();
+    // translate(this.x, this.y);
+    // rect(0, 0, 5, 5);
+    // rotate(PI / 4);
+    // rect(0, 0, 5, 5);
+    // pop();
   }
 
   getPosition() {
     return createVector(this.x, this.y);
   }
 }
+

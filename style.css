@@ -11,4 +11,5 @@ canvas {
   display: block;
   transform:scale(2);
   transform-origin: center; /* 确保放大时画布保持居中 */
+  border: none;
 }

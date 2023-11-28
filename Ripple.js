@@ -53,7 +53,7 @@ class Ripple {
 
   disturb(x, y) {
     if (x > 0 && x < this.cols && y > 0 && y < this.rows) {
-      this.previous[x][y] = 2000; //数值越小 涟漪越不明显
+      this.previous[x][y] = 2500; //数值越小 涟漪越不明显
     }
   }
 }

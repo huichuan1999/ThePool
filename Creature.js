@@ -3,11 +3,11 @@ class Creature{
     this.pos = createVector(x,y);
     this.vel = createVector(0,0);
     this.acc = createVector(0,0);
-    this.maxSpeed = 0.05;
-    this.maxForce = 0.02;
+    this.maxSpeed = 0.7;
+    this.maxForce = 0.05;
     this.r = 3;
     this.behavior = 'seek'; // 初始行为设为 seek
-    this.perceptionRadius = 120; // 新增检测范围
+    this.perceptionRadius = 200; // 新增检测范围
     this.repulsionRadius = 30; // 排斥力作用范围
   }
   
@@ -17,7 +17,7 @@ class Creature{
   }
   
   flee(target) {
-    return this.seek(target).mult(-2);
+    return this.seek(target).mult(-1);
   }
   
   seek(target){
@@ -72,17 +72,23 @@ class Creature{
   }
   
   edges() {
-    if (this.pos.x > width + this.r) {
-      this.pos.x = -this.r;
-    } else if (this.pos.x < -this.r) {
-      this.pos.x = width + this.r;
+    if (this.pos.x > width - this.r) {
+      this.pos.x = width - this.r;
+      this.vel.x *= -1; // 反转水平速度分量
+    } else if (this.pos.x < this.r) {
+      this.pos.x = this.r;
+      this.vel.x *= -1; // 反转水平速度分量
     }
-    if (this.pos.y > height + this.r) {
-      this.pos.y = -this.r;
-    } else if (this.pos.y < -this.r) {
-      this.pos.y = height + this.r;
+  
+    if (this.pos.y > height - this.r) {
+      this.pos.y = height - this.r;
+      this.vel.y *= -1; // 反转垂直速度分量
+    } else if (this.pos.y < this.r) {
+      this.pos.y = this.r;
+      this.vel.y *= -1; // 反转垂直速度分量
     }
   }
+  
   
   checkForRipple(prevVel) {
     let angleChange = getAngleBetween(prevVel, this.vel);
