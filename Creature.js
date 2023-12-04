@@ -3,18 +3,27 @@ class Creature{
     this.pos = createVector(x,y);
     this.vel = createVector(0,0);
     this.acc = createVector(0,0);
-    let minutesSinceMorning = getMinutesSinceMorning();
-     // 根据时间差调整速度和力
-     this.maxSpeed = map(minutesSinceMorning, 0, 60*8, 1.0, 0.5); // 假设8小时内减慢到最小速度
-     this.maxForce = map(minutesSinceMorning, 0, 60*8, 0.1, 0.03); // 同上
-    // this.maxSpeed = 0.7;
-    // this.maxForce = 0.05;
+    
+    this.maxSpeed = 0.7;
+    this.maxForce = 0.05;
     this.r = 3;
+    this.repulsionRadius = 30; // 排斥力作用范围
+
     this.behavior = 'seek'; // 初始行为设为 seek
     this.perceptionRadius = 200; // 新增检测范围
-    this.repulsionRadius = 30; // 排斥力作用范围
+
+    this.updateTimeParam();
   }
   
+  updateTimeParam(){
+    let minutesSinceMorning = getMinutesSinceMorning();
+     // 根据时间差调整速度和力
+     this.maxSpeed = map(minutesSinceMorning, 0, 60*9, 1.0, 0.5); // 假设8小时内减慢到最小速度
+     this.maxForce = map(minutesSinceMorning, 0, 60*9, 0.1, 0.03); // 同上
+     this.r = map(minutesSinceMorning, 0, 60*9, 1, 4);
+     this.repulsionRadius = map(minutesSinceMorning, 0, 60*9, 50, 20); // 排斥力作用范围
+  }
+
   toggleBehavior() {
     // 切换行为模式
     this.behavior = (this.behavior === 'seek') ? 'flee' : 'seek';
@@ -54,6 +63,7 @@ class Creature{
   }
   
   update(){
+    this.updateTimeParam();
     this.vel.add(this.acc);
     this.vel.mult(0.9); // Apply damping
     this.pos.add(this.vel);
