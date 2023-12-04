@@ -56,6 +56,7 @@ function draw() {
 
   for (let target of targets) {
     target.update();
+    //console.log(target.movingToEnd);
     target.display();
   }
   //let targetPos = target.getPosition();
@@ -77,7 +78,22 @@ function draw() {
     if (frameCount % 600 === 0) {
       creature.toggleBehavior();
       ripple.disturb(Math.floor(creature.pos.x), Math.floor(creature.pos.y));
+      console.log(frameCount);
     }
   }
 
+  //console.log(getMinutesSinceMorning());
+
+}
+
+function getMinutesSinceMorning() {
+  //上午9点到晚上5点的分钟差是480
+  //上午9点到晚上5点的分钟差是540
+  let now = new Date();
+  let morning = new Date(); // 当天的上午9点
+  now.setHours(18,0,0,0);
+  morning.setHours(9, 0, 0, 0); // 设置时间为上午9点
+
+  let diff = now - morning; // 毫秒差
+  return Math.floor(diff / 60000); // 转换为分钟
 }
