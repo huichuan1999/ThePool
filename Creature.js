@@ -15,13 +15,19 @@ class Creature{
     this.updateTimeParam();
   }
   
+  crawling() {
+    let angle = noise(this.pos.x / 500, this.pos.y / 500, frameCount / 20) * TWO_PI * 2; //0-2PI
+    this.pos.x += this.vel.x * cos(angle) * 3;
+    this.pos.y += this.vel.y * sin(angle) * 3;
+  }
+
   updateTimeParam(){
     let minutesSinceMorning = getMinutesSinceMorning();
      // 根据时间差调整速度和力
      this.maxSpeed = map(minutesSinceMorning, 0, 60*9, 1.0, 0.5); // 假设8小时内减慢到最小速度
      this.maxForce = map(minutesSinceMorning, 0, 60*9, 0.1, 0.03); // 同上
      this.r = map(minutesSinceMorning, 0, 60*9, 1, 4);
-     this.repulsionRadius = map(minutesSinceMorning, 0, 60*9, 50, 20); // 排斥力作用范围
+     this.repulsionRadius = map(minutesSinceMorning, 0, 60*9, 50, 10); // 排斥力作用范围
   }
 
   toggleBehavior() {
@@ -106,12 +112,12 @@ class Creature{
   
   checkForRipple(prevVel) {
     let angleChange = getAngleBetween(prevVel, this.vel);
-    if (abs(angleChange) > PI/1.2) {
+    //if (abs(angleChange) > PI/1.2) {
       ripple.disturb(Math.floor(this.pos.x), Math.floor(this.pos.y));
-    }
+    //}
   }
 
-  
+
   applyBehavior(targets) {
     
      let totalForce = createVector();
