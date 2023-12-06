@@ -32,7 +32,7 @@ function setup() {
     let creature = new Creature(random(width), random(height));
     creatures.push(creature);
   }
-  rectMode(CENTER);
+  //rectMode(CENTER);
   pixelDensity(1);
   noSmooth();
 }
@@ -83,7 +83,9 @@ function draw() {
       console.log(getMinutesSinceMorning());
     }
   }
-
+  noFill();
+  stroke(255);
+  rect(1,1,width-1,height-1);
   //console.log(getMinutesSinceMorning());
 
 }
