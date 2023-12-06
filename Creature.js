@@ -106,7 +106,7 @@ class Creature{
   
   checkForRipple(prevVel) {
     let angleChange = getAngleBetween(prevVel, this.vel);
-    if (abs(angleChange) > PI/1.2) {
+    if (abs(angleChange) > PI/4) {
       ripple.disturb(Math.floor(this.pos.x), Math.floor(this.pos.y));
     }
   }
