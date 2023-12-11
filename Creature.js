@@ -10,7 +10,7 @@ class Creature{
     this.repulsionRadius = 30; // 排斥力作用范围
 
     this.behavior = 'seek'; // 初始行为设为 seek
-    this.perceptionRadius = 200; // 新增检测范围
+    this.perceptionRadius = 150; // 新增检测范围
 
     this.updateTimeParam();
   }
